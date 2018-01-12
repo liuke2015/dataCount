@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据统计</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/data.js"></script>
+</head>
+<body>
+<div id="main">
+    <div class="table">
+        <template v-for="item in groupList">
+            <div class="item-box">
+                <h1>{{item.name}}</h1>
+                <ul class="table-col table-num">
+                    <li v-for="item in stageNum">
+                        <p>{{item}}</p>
+                    </li>
+                </ul>
+                <ul class="table-col" v-for="list in item.data">
+                    <li class="date-box">{{list.date}}</li>
+                    <template v-for="(row,key) in list.list">
+                        <li :class="countColor(key,row.stage,row.status,item.name+'_'+list.date+'_'+row.stage)" :id="item.name+'_'+list.date+'_'+row.stage"><!--组一_2018-1-12_45-->
+                            {{row.stage}}
+                        </li>
+                    </template>
+
+                </ul>
+            </div>
+        </template>
+    </div>
+</div>
+<!-- 先引入 Vue -->
+<script src="js/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    new Vue({
+        el: "#main",
+        data: {
+            stageNum: [],
+            groupTit: null,
+            groupList: null
+        },
+        directives: {
+          /*  run: {
+                inserted(el,binding) {
+                    console.log("aaaa" + el.id);
+                }
+            }*/
+        },
+        methods: {
+            init: function () {
+                var _this = this;
+                for (var i = 1; i < 90; i++) {
+                    _this.stageNum.push(i);
+                }
+                var groupNum = group.length;
+                _this.groupTit = group;
+                _this.groupList = allData;
+                console.log(groupNum);
+            },
+            test: function (el) {
+                console.log(el.target.id)
+            },
+            countColor: function (key, stage, status,id) {
+                var _this=this;
+               /* if (stage > cur) {
+                    var frg=document.createDocumentFragment(),lineNum=parseInt(stage)-parseInt(cur);
+                    _this.$nextTick(function(){
+                        for(var i=0;i<2;i++){
+                            var oLi=document.createElement("li");
+                            oLi.innerHTML="123";
+                            frg.appendChild(oLi);
+                        }
+                        var el=document.getElementById(id);
+                        el.parentElement.insertBefore(frg);
+                    })
+                }*/
+               switch (status){
+                   case "true":
+                       return "green" ;
+                   case "false":
+                       return "red";
+                   default:
+                       return "";
+
+               }
+            }
+        },
+        mounted: function () {
+            this.init();
+        }
+    })
+</script>
+</body>
+</html>
